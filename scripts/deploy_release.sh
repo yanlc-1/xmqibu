@@ -22,6 +22,7 @@ CONTAINER_MEDIA_DIR="${CONTAINER_MEDIA_DIR:-/uploads}"
 PORT="${PORT:-18092}"
 IMAGE="frontier-site:${RELEASE_TAG}"
 CONTAINER_NAME="${APP_NAME}-${RELEASE_TAG}"
+KEEP_COUNT="${KEEP_COUNT:-3}"
 
 if [ ! -f "$ENV_FILE" ]; then
   echo "env file not found: $ENV_FILE" >&2
@@ -97,5 +98,41 @@ deployed_at=$(date '+%Y-%m-%d %H:%M:%S %z')
 EOF
 
 printf '%s\n' "$RELEASE_TAG" > "$RELEASES_DIR/current"
+
+cleanup_old_containers() {
+  ACTIVE_IP="$1"
+  CURRENT_RELEASE="$2"
+  TMP_FILE="$(mktemp)"
+
+  docker ps -a --format '{{.Names}}' | grep "^${APP_NAME}-" | sort -r > "$TMP_FILE" || true
+
+  count=0
+  while IFS= read -r old_container_name; do
+    [ -n "$old_container_name" ] || continue
+    count=$((count + 1))
+
+    if [ "$count" -le "$KEEP_COUNT" ]; then
+      continue
+    fi
+
+    old_container_ip="$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' "$old_container_name" 2>/dev/null || true)"
+    old_release_tag="${old_container_name#${APP_NAME}-}"
+
+    if [ -n "$ACTIVE_IP" ] && [ "$old_container_ip" = "$ACTIVE_IP" ]; then
+      continue
+    fi
+
+    if [ -n "$CURRENT_RELEASE" ] && [ "$old_release_tag" = "$CURRENT_RELEASE" ]; then
+      continue
+    fi
+
+    docker rm -f "$old_container_name" >/dev/null 2>&1 || true
+    rm -f "$RELEASES_DIR/$old_release_tag.txt"
+  done < "$TMP_FILE"
+
+  rm -f "$TMP_FILE"
+}
+
+cleanup_old_containers "$CONTAINER_IP" "$RELEASE_TAG"
 
 echo "deployed $CONTAINER_NAME at $CONTAINER_IP"

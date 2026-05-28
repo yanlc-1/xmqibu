@@ -84,6 +84,7 @@ cd /opt/xmqibu-frontier-site/repo
 7. 访问 `/healthz` 做健康检查
 8. 更新 Nginx 上游并 reload
 9. 在 `releases/` 里写入当前发布记录
+10. 自动清理一个最旧的旧容器，默认总共保留最近 `3` 个版本
 
 说明：
 
@@ -110,6 +111,23 @@ GOPROXY_VALUE=https://your-proxy.example,direct ./scripts/deploy_from_git.sh
 - `/opt/xmqibu-frontier-site/releases/*.txt`
 
 用来确认当前线上跑的是哪次发布。
+
+## 清理旧版本
+
+旧容器清理已经内置在部署流程里，不需要额外执行脚本。
+
+默认行为：
+
+- 每次部署成功后自动检查旧容器
+- 默认总共保留最近 `3` 个 `frontier-site-web-*` 容器
+- 会跳过当前 Nginx 正在指向的容器
+
+如果你想调整保留数量，可以在部署时覆盖：
+
+```bash
+cd /opt/xmqibu-frontier-site/repo
+KEEP_COUNT=2 ./scripts/deploy_from_git.sh
+```
 
 ## 说明
 
