@@ -68,10 +68,11 @@ if [ "$CONTAINER_IP" = "" ]; then
 fi
 
 attempt=0
-until curl -fsS "http://$CONTAINER_IP:$PORT/healthz" >/dev/null; do
+until curl -fsS "http://$CONTAINER_IP:$PORT/healthz" >/dev/null 2>&1; do
   attempt=$((attempt + 1))
   if [ "$attempt" -ge 15 ]; then
     echo "health check failed for $CONTAINER_NAME" >&2
+    curl -fsS "http://$CONTAINER_IP:$PORT/healthz" >/dev/null 2>&1 || true
     docker logs "$CONTAINER_NAME" >&2 || true
     exit 1
   fi
