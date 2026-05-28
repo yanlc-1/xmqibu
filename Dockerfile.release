@@ -1,0 +1,9 @@
+FROM scratch
+
+WORKDIR /
+
+COPY frontier-site /frontier-site
+
+EXPOSE 18092
+
+ENTRYPOINT ["/frontier-site"]

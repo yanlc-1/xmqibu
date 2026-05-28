@@ -78,7 +78,7 @@ cd /opt/xmqibu-frontier-site/repo
 1. `git fetch`
 2. 对齐到 `origin/main`
 3. 本机构建 Linux 二进制
-4. 复制 `Dockerfile` 到部署目录
+4. 复制兼容旧 Docker 的 `Dockerfile.release` 到部署目录
 5. 调用 `deploy_release.sh`
 6. 启动新容器
 7. 访问 `/healthz` 做健康检查
@@ -88,6 +88,7 @@ cd /opt/xmqibu-frontier-site/repo
 说明：
 
 - 脚本默认使用 `GOPROXY=https://goproxy.cn,direct` 构建
+- 线上手动部署默认使用 `Dockerfile.release`
 - 如果你后面有自己的 Go 代理，也可以在执行前覆盖：
 
 ```bash
