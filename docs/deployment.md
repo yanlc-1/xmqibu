@@ -85,6 +85,15 @@ cd /opt/xmqibu-frontier-site/repo
 8. 更新 Nginx 上游并 reload
 9. 在 `releases/` 里写入当前发布记录
 
+说明：
+
+- 脚本默认使用 `GOPROXY=https://goproxy.cn,direct` 构建
+- 如果你后面有自己的 Go 代理，也可以在执行前覆盖：
+
+```bash
+GOPROXY_VALUE=https://your-proxy.example,direct ./scripts/deploy_from_git.sh
+```
+
 ## 回滚
 
 当前回滚方式仍然很直接：
