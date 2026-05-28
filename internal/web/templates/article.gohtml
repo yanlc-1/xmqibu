@@ -1,0 +1,34 @@
+{{define "article"}}
+{{template "layout-start" (dict "Title" .Article.Title)}}
+<article class="story-layout">
+  <header class="story-header">
+    <p class="eyebrow">FEATURE ARTICLE</p>
+    <h1>{{.Article.Title}}</h1>
+    <p class="story-summary">{{.Article.Summary}}</p>
+    <div class="story-meta">
+      <span>{{.Article.Author}}</span>
+      <span>{{formatDate .Article.PublishedAt}}</span>
+    </div>
+    <div class="tag-row">
+      {{range .Article.Tags}}<a class="tag-pill" href="/tags/{{.Slug}}">{{.Name}}</a>{{end}}
+    </div>
+  </header>
+  {{if .Article.CoverImage}}
+  <figure class="story-cover">
+    <img src="{{.Article.CoverImage}}" alt="{{.Article.Title}}">
+  </figure>
+  {{end}}
+  <div class="story-body">{{.Article.Body}}</div>
+  {{if .Article.SourceLinks}}
+  <section class="sources">
+    <h2>参考链接</h2>
+    <ul>
+      {{range .Article.SourceLinks}}
+      <li><a href="{{.}}" target="_blank" rel="noreferrer">{{.}}</a></li>
+      {{end}}
+    </ul>
+  </section>
+  {{end}}
+</article>
+{{template "layout-end" .}}
+{{end}}

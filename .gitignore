@@ -1,0 +1,6 @@
+.idea/
+media/
+skills/
+docs/superpowers/
+scripts/__pycache__/
+*.pyc

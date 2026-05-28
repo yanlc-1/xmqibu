@@ -1,0 +1,36 @@
+{{define "layout-start"}}
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{.Title}}</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <div class="site-shell">
+    <header class="site-header">
+      <a class="brand" href="/">
+        <span class="brand-mark">FRONTIER</span>
+        <span class="brand-name">科技前沿观察</span>
+      </a>
+      <nav class="site-nav">
+        <a href="/">首页</a>
+        <a href="/briefs">短讯</a>
+        <a href="/search">搜索</a>
+      </nav>
+    </header>
+    <main class="page">
+{{end}}
+
+{{define "layout-end"}}
+    </main>
+    <footer class="site-footer">
+      <p>个人技术博客© 2022 All Rights Reserved.</p>
+      <p><a href="https://beian.miit.gov.cn/" target="_blank" rel="noreferrer">闽ICP备2022008558号-1</a></p>
+    </footer>
+  </div>
+  <script src="/static/site.js"></script>
+</body>
+</html>
+{{end}}

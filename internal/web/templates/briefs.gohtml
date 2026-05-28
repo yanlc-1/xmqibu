@@ -1,0 +1,30 @@
+{{define "briefs"}}
+{{template "layout-start" (dict "Title" "前沿短讯")}}
+<section class="list-header">
+  <p class="eyebrow">SIGNAL FEED</p>
+  <h1>前沿短讯</h1>
+  <p>高频更新的工程与技术信号。</p>
+</section>
+<section class="brief-page-list">
+  {{range .Briefs}}
+  <article class="brief-card{{if .ExternalURL}} brief-card-linkable{{end}}">
+    <div class="brief-topline">
+      <span>{{formatDate .PublishedAt}}</span>
+      <span class="importance">强度 {{.Importance}}</span>
+    </div>
+    <h2>
+      {{if .ExternalURL}}
+      <a class="brief-link" href="{{.ExternalURL}}" target="_blank" rel="noreferrer">{{.Title}}<span class="link-mark">↗</span></a>
+      {{else}}
+      {{.Title}}
+      {{end}}
+    </h2>
+    <p>{{.Summary}}</p>
+    {{if .ExternalURL}}<a class="source-link" href="{{.ExternalURL}}" target="_blank" rel="noreferrer">查看原文</a>{{end}}
+  </article>
+  {{else}}
+  <p class="empty-state">暂时还没有短讯。</p>
+  {{end}}
+</section>
+{{template "layout-end" .}}
+{{end}}

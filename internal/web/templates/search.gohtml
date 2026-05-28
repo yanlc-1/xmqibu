@@ -1,0 +1,56 @@
+{{define "search"}}
+{{template "layout-start" (dict "Title" "搜索")}}
+<section class="list-header search-header">
+  <p class="eyebrow">SEARCH</p>
+  <h1>搜索内容</h1>
+  <form class="search-form" method="get" action="/search">
+    <input type="search" name="q" value="{{.Query}}" placeholder="搜索标题、摘要或标签">
+    <button type="submit">搜索</button>
+  </form>
+</section>
+<section class="search-results">
+  <div>
+    <h2>长文</h2>
+    {{range .Articles}}
+    <article class="article-card article-card-linkable">
+      <h3><a href="/articles/{{.Slug}}">{{.Title}}</a></h3>
+      <p>{{.Summary}}</p>
+      <a class="card-link" href="/articles/{{.Slug}}">阅读全文</a>
+    </article>
+    {{else}}
+    <p class="empty-state">没有匹配到长文。</p>
+    {{end}}
+  </div>
+  <div>
+    <h2>短讯</h2>
+    {{range .Briefs}}
+    <article class="brief-card compact{{if .ExternalURL}} brief-card-linkable{{end}}">
+      <h3>
+        {{if .ExternalURL}}
+        <a class="brief-link" href="{{.ExternalURL}}" target="_blank" rel="noreferrer">{{.Title}}<span class="link-mark">↗</span></a>
+        {{else}}
+        {{.Title}}
+        {{end}}
+      </h3>
+      <p>{{.Summary}}</p>
+      {{if .ExternalURL}}
+      <a class="source-link inline-source-link" href="{{.ExternalURL}}" target="_blank" rel="noreferrer">查看原文</a>
+      {{end}}
+    </article>
+    {{else}}
+    <p class="empty-state">没有匹配到短讯。</p>
+    {{end}}
+  </div>
+  <div>
+    <h2>标签</h2>
+    <div class="tag-cloud">
+      {{range .Tags}}
+      <a class="tag-pill" href="/tags/{{.Slug}}">{{.Name}}</a>
+      {{else}}
+      <p class="empty-state">没有匹配到标签。</p>
+      {{end}}
+    </div>
+  </div>
+</section>
+{{template "layout-end" .}}
+{{end}}

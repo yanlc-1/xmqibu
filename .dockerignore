@@ -1,0 +1,9 @@
+.git
+.github
+docs
+media
+skills
+scripts
+__pycache__
+*.pyc
+frontier-site

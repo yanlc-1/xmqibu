@@ -1,0 +1,170 @@
+{{define "home"}}
+{{template "layout-start" (dict "Title" "科技前沿观察")}}
+<section class="hero {{if .HeroArticle.CoverImage}}hero-with-media{{end}}">
+  <div class="hero-copy">
+    <div class="hero-ledger">
+      <p class="eyebrow">EDITORIAL / FRONTIER TECH</p>
+      <span class="hero-ledger-chip">DAILY SIGNALS</span>
+    </div>
+    <h1>{{.HeroArticle.Title}}</h1>
+    <p class="hero-summary">{{.HeroArticle.Summary}}</p>
+    <div class="hero-meta">
+      <span>{{formatDate .HeroArticle.PublishedAt}}</span>
+      <span>{{.HeroArticle.Author}}</span>
+    </div>
+    <div class="hero-actions">
+      <a class="primary-link" href="/articles/{{.HeroArticle.Slug}}">阅读主文</a>
+      <a class="secondary-link ghost-link" href="#signal-feed">跳到今日短讯</a>
+    </div>
+  </div>
+  {{if .HeroArticle.CoverImage}}
+  <div class="hero-media">
+    <img src="{{.HeroArticle.CoverImage}}" alt="{{.HeroArticle.Title}}">
+  </div>
+  {{end}}
+  <aside class="hero-panel">
+    <div class="hero-panel-block">
+      <p class="panel-label">本期重点</p>
+      <p>{{.HeroArticle.Summary}}</p>
+      <div class="hero-tags">
+        {{range .HeroArticle.Tags}}<a href="/tags/{{.Slug}}">{{.Name}}</a>{{end}}
+      </div>
+      <a class="secondary-link" href="/articles/{{.HeroArticle.Slug}}">进入专题长文</a>
+    </div>
+    <div class="hero-panel-block">
+      <p class="panel-label">栏目导览</p>
+      <div class="track-jump-list">
+        {{range .Sections}}
+        <a href="#track-{{.Slug}}">{{.Label}}</a>
+        {{end}}
+      </div>
+    </div>
+  </aside>
+</section>
+
+<section class="section-grid">
+  <div class="section-heading">
+    <div>
+      <p class="eyebrow">DEEP READS</p>
+      <h2>精选长文</h2>
+    </div>
+    <p class="section-note">保留更长的阅读跨度，把重要变化从噪音里拆出来。</p>
+  </div>
+  <div class="article-grid">
+    {{range .FeaturedArticles}}
+    <article class="article-card article-card-linkable">
+      {{if .CoverImage}}
+      <div class="article-cover">
+        <img src="{{.CoverImage}}" alt="{{.Title}}">
+      </div>
+      {{end}}
+      <p class="card-date">{{formatDate .PublishedAt}}</p>
+      <h3><a href="/articles/{{.Slug}}">{{.Title}}</a></h3>
+      <p>{{.Summary}}</p>
+      <a class="card-link" href="/articles/{{.Slug}}">阅读全文</a>
+    </article>
+    {{else}}
+    <p class="empty-state">还没有精选长文，等第一批内容写入后这里会自动展示。</p>
+    {{end}}
+  </div>
+</section>
+
+<section class="section-grid">
+  <div class="section-heading">
+    <div>
+      <p class="eyebrow">EDITORIAL TRACKS</p>
+      <h2>今日追踪栏目</h2>
+    </div>
+    <p class="section-note">围绕公司、开源和产品落地 4 条主线，保持固定视角和稳定更新。</p>
+  </div>
+  <div class="section-stack editorial-stack">
+    {{range .Sections}}
+    <section class="topic-section" id="track-{{.Slug}}">
+      <div class="topic-header">
+        <div>
+          <h3><a href="/tags/{{.Slug}}">{{.Label}}</a></h3>
+          <p>{{.Description}}</p>
+        </div>
+        <a class="topic-link" href="/tags/{{.Slug}}">查看专题</a>
+      </div>
+      <div class="topic-columns">
+        <div class="topic-column">
+          <p class="topic-label">文章</p>
+          {{range .Articles}}
+          <article class="article-card article-card-linkable compact-card">
+            {{if .CoverImage}}
+            <div class="article-cover">
+              <img src="{{.CoverImage}}" alt="{{.Title}}">
+            </div>
+            {{end}}
+            <p class="card-date">{{formatDate .PublishedAt}}</p>
+            <h4><a href="/articles/{{.Slug}}">{{.Title}}</a></h4>
+            <p>{{.Summary}}</p>
+            <a class="card-link" href="/articles/{{.Slug}}">阅读全文</a>
+          </article>
+          {{else}}
+          <p class="empty-state">这个栏目下暂时还没有文章。</p>
+          {{end}}
+        </div>
+        <div class="topic-column">
+          <p class="topic-label">动态</p>
+      {{range .Briefs}}
+      <article class="brief-item{{if .ExternalURL}} interactive{{end}}">
+        <time>{{formatMonthDay .PublishedAt}}</time>
+        <div>
+          <h4>
+            {{if .ExternalURL}}
+            <a class="brief-link" href="{{.ExternalURL}}" target="_blank" rel="noreferrer">{{.Title}}<span class="link-mark">↗</span></a>
+            {{else}}
+            {{.Title}}
+            {{end}}
+          </h4>
+          <p>{{.Summary}}</p>
+          {{if .ExternalURL}}
+          <a class="source-link inline-source-link" href="{{.ExternalURL}}" target="_blank" rel="noreferrer">查看原文</a>
+          {{end}}
+        </div>
+      </article>
+          {{else}}
+          <p class="empty-state">这个栏目下暂时还没有短讯。</p>
+          {{end}}
+        </div>
+      </div>
+    </section>
+    {{end}}
+  </div>
+</section>
+
+<section class="section-grid signal-grid" id="signal-feed">
+  <div class="section-heading">
+    <div>
+      <p class="eyebrow">SIGNAL FEED</p>
+      <h2>最新短讯</h2>
+    </div>
+    <p class="section-note">给高频变化留出更轻的阅读入口，先快速扫描，再决定是否深挖。</p>
+  </div>
+  <div class="brief-list">
+    {{range .LatestBriefs}}
+    <article class="brief-item{{if .ExternalURL}} interactive{{end}}">
+      <time>{{formatMonthDay .PublishedAt}}</time>
+      <div>
+        <h3>
+          {{if .ExternalURL}}
+          <a class="brief-link" href="{{.ExternalURL}}" target="_blank" rel="noreferrer">{{.Title}}<span class="link-mark">↗</span></a>
+          {{else}}
+          {{.Title}}
+          {{end}}
+        </h3>
+        <p>{{.Summary}}</p>
+        {{if .ExternalURL}}
+        <a class="source-link inline-source-link" href="{{.ExternalURL}}" target="_blank" rel="noreferrer">查看原文</a>
+        {{end}}
+      </div>
+    </article>
+    {{else}}
+    <p class="empty-state">短讯区会在定时任务开始推送后自动充实。</p>
+    {{end}}
+  </div>
+</section>
+{{template "layout-end" .}}
+{{end}}

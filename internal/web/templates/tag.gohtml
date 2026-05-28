@@ -1,0 +1,47 @@
+{{define "tag"}}
+{{template "layout-start" (dict "Title" .Tag.Name)}}
+<section class="list-header">
+  <p class="eyebrow">TOPIC ARCHIVE</p>
+  <h1>{{.Tag.Name}}</h1>
+  <p>围绕这个技术主题的长文与短讯聚合。</p>
+</section>
+<section class="tag-split">
+  <div>
+    <h2>相关文章</h2>
+    {{range .Articles}}
+    <article class="article-card article-card-linkable">
+      <p class="card-date">{{formatDate .PublishedAt}}</p>
+      <h3><a href="/articles/{{.Slug}}">{{.Title}}</a></h3>
+      <p>{{.Summary}}</p>
+      <a class="card-link" href="/articles/{{.Slug}}">阅读全文</a>
+    </article>
+    {{else}}
+    <p class="empty-state">这个主题下还没有长文。</p>
+    {{end}}
+  </div>
+  <div>
+    <h2>相关短讯</h2>
+    {{range .Briefs}}
+    <article class="brief-item stacked{{if .ExternalURL}} interactive{{end}}">
+      <time>{{formatMonthDay .PublishedAt}}</time>
+      <div>
+        <h3>
+          {{if .ExternalURL}}
+          <a class="brief-link" href="{{.ExternalURL}}" target="_blank" rel="noreferrer">{{.Title}}<span class="link-mark">↗</span></a>
+          {{else}}
+          {{.Title}}
+          {{end}}
+        </h3>
+        <p>{{.Summary}}</p>
+        {{if .ExternalURL}}
+        <a class="source-link inline-source-link" href="{{.ExternalURL}}" target="_blank" rel="noreferrer">查看原文</a>
+        {{end}}
+      </div>
+    </article>
+    {{else}}
+    <p class="empty-state">这个主题下还没有短讯。</p>
+    {{end}}
+  </div>
+</section>
+{{template "layout-end" .}}
+{{end}}
