@@ -34,6 +34,12 @@
 4. 媒体目录
    - `/opt/xmqibu-frontier-site/uploads`
 
+5. 日志目录
+   - `/opt/xmqibu-frontier-site/logs`
+
+6. 发布记录目录
+   - `/opt/xmqibu-frontier-site/releases`
+
 ## 首次准备
 
 服务器上首次执行：
@@ -41,8 +47,8 @@
 ```bash
 mkdir -p /opt/xmqibu-frontier-site
 cd /opt/xmqibu-frontier-site
-git clone git@github.com:yanlc-1/xmqibu.git repo
-mkdir -p config uploads
+git clone https://github.com/yanlc-1/xmqibu.git repo
+mkdir -p config uploads logs releases
 ```
 
 然后准备：
@@ -77,6 +83,7 @@ cd /opt/xmqibu-frontier-site/repo
 6. 启动新容器
 7. 访问 `/healthz` 做健康检查
 8. 更新 Nginx 上游并 reload
+9. 在 `releases/` 里写入当前发布记录
 
 ## 回滚
 
@@ -86,6 +93,13 @@ cd /opt/xmqibu-frontier-site/repo
 2. 修改 `/usr/local/nginx/conf/vhost/xmqibu-https.conf`
 3. 把 `proxy_pass` 指回旧容器
 4. reload 宿主机 Nginx
+
+也可以先看：
+
+- `/opt/xmqibu-frontier-site/releases/current`
+- `/opt/xmqibu-frontier-site/releases/*.txt`
+
+用来确认当前线上跑的是哪次发布。
 
 ## 说明
 

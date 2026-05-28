@@ -13,6 +13,7 @@ APP_NAME="${APP_NAME:-frontier-site-web}"
 DOCKER_NETWORK="${DOCKER_NETWORK:-nginx-proxy}"
 ENV_FILE="${ENV_FILE:-$APP_ROOT/config/frontier-site.env}"
 HOST_MEDIA_DIR="${HOST_MEDIA_DIR:-$APP_ROOT/uploads}"
+RELEASES_DIR="${RELEASES_DIR:-$APP_ROOT/releases}"
 HOST_NGINX_BIN="${HOST_NGINX_BIN:-/usr/local/nginx/sbin/nginx}"
 VHOST_FILE="${VHOST_FILE:-/usr/local/nginx/conf/vhost/xmqibu-https.conf}"
 BINARY_PATH="${BINARY_PATH:-$APP_ROOT/frontier-site}"
@@ -36,6 +37,8 @@ if [ ! -f "$DOCKERFILE_PATH" ]; then
   echo "dockerfile not found: $DOCKERFILE_PATH" >&2
   exit 1
 fi
+
+mkdir -p "$RELEASES_DIR"
 
 BUILD_DIR="$(mktemp -d)"
 cleanup() {
@@ -83,5 +86,15 @@ perl -0pi -e "s#proxy_pass http://[^;]+:$PORT;#proxy_pass http://$CONTAINER_IP:$
 
 curl -kfsS --resolve xmqibu.com:443:127.0.0.1 https://xmqibu.com/ >/dev/null
 curl -kfsS --resolve www.xmqibu.com:443:127.0.0.1 https://www.xmqibu.com/ >/dev/null
+
+cat > "$RELEASES_DIR/$RELEASE_TAG.txt" <<EOF
+release_tag=$RELEASE_TAG
+container_name=$CONTAINER_NAME
+image=$IMAGE
+container_ip=$CONTAINER_IP
+deployed_at=$(date '+%Y-%m-%d %H:%M:%S %z')
+EOF
+
+printf '%s\n' "$RELEASE_TAG" > "$RELEASES_DIR/current"
 
 echo "deployed $CONTAINER_NAME at $CONTAINER_IP"

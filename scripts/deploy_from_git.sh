@@ -9,6 +9,8 @@ BRANCH_NAME="${BRANCH_NAME:-main}"
 RELEASE_TAG="${RELEASE_TAG:-manual-$(date +%Y%m%d%H%M%S)}"
 DEPLOY_SCRIPT="${DEPLOY_SCRIPT:-$REPO_DIR/scripts/deploy_release.sh}"
 
+mkdir -p "$APP_ROOT/bin" "$APP_ROOT/config" "$APP_ROOT/uploads" "$APP_ROOT/logs" "$APP_ROOT/releases"
+
 if [ ! -d "$REPO_DIR/.git" ]; then
   echo "git repo not found: $REPO_DIR" >&2
   exit 1
